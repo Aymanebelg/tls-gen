@@ -16,22 +16,16 @@ import shutil
 def _copy_artifacts_to_results(opts):
     os.makedirs(p.relative_path("result"), exist_ok=True)
     g.copy_root_ca_certificate_and_key_pair()
-    cn = opts.common_name
-    name = 'server_{}'.format(cn)
-    g.copy_leaf_certificate_and_key_pair(name)
-    name = 'client_{}'.format(cn)
-    g.copy_leaf_certificate_and_key_pair(name)
+    g.copy_leaf_certificate_and_key_pair("server")
+    g.copy_leaf_certificate_and_key_pair("client")
 
 
 def generate(opts):
     cli.validate_password_if_provided(opts)
     print("Will generate a root CA and two certificate/key pairs (server and client)")
     g.generate_root_ca(opts)
-    cn = opts.common_name
-    name = 'server_{}'.format(cn)
-    g.generate_leaf_certificate_and_key_pair('server', opts, name)
-    name = 'client_{}'.format(cn)
-    g.generate_leaf_certificate_and_key_pair('client', opts, name)
+    g.generate_leaf_certificate_and_key_pair('server', opts)
+    g.generate_leaf_certificate_and_key_pair('client', opts)
     _copy_artifacts_to_results(opts)
     print("Done! Find generated certificates and private keys under ./result!")
 
@@ -39,21 +33,18 @@ def generate(opts):
 def generate_client(opts):
     cli.ensure_password_is_provided(opts)
     print("Will generate a certificate/key pair (client only)")
-    cn = opts.common_name
-    name = 'client_{}'.format(cn)
-    g.generate_leaf_certificate_and_key_pair('client', opts, name)
-    g.copy_leaf_certificate_and_key_pair(name)
+    g.generate_leaf_certificate_and_key_pair('client', opts)
+    g.copy_leaf_certificate_and_key_pair("client")
     print("Done! Find generated certificates and private keys under ./result!")
 
 
 def generate_server(opts):
     cli.ensure_password_is_provided(opts)
     print("Will generate a certificate/key pair (server only)")
-    cn = opts.common_name
-    name = 'server_{}'.format(cn)
-    g.generate_leaf_certificate_and_key_pair('server', opts, name)
-    g.copy_leaf_certificate_and_key_pair(name)
+    g.generate_leaf_certificate_and_key_pair('server', opts)
+    g.copy_leaf_certificate_and_key_pair("server")
     print("Done! Find generated certificates and private keys under ./result!")
+
 
 
 def clean(opts):
