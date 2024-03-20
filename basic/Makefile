@@ -9,4 +9,3 @@ server:
 
 client:
     openssl s_client -cert $(CURDIR)/result/client_certificate.pem -key $(CURDIR)/result/client_private_key.pem -CAfile $(CURDIR)/result/ca_certificate.pem -verify 8 -verify_hostname $(CN)
-
